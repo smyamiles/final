@@ -1,6 +1,7 @@
 package com.example.tutoriareto3.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.mapping.List;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,22 +14,26 @@ public class Machine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
-
     private String brand;
-
-    private String description;
-
     @Column(name="years")
-    private Integer years;
+    private Integer year;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name="categoryId")
-    @JsonIgnoreProperties("machines")
+    @JsonIgnoreProperties("machine")
     private Category category;
 
-    public Integer getId() {
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "machine")
+    @JsonIgnoreProperties({"machine","client"})
+    private List<Message> messages;
+
+    @OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "machine")
+    @JsonIgnoreProperties({"machine","messages"})
+    private List<Reservation> reservations;
+
+     public Integer getId() {
         return id;
     }
 
@@ -52,6 +57,14 @@ public class Machine implements Serializable {
         this.brand = brand;
     }
 
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -60,11 +73,28 @@ public class Machine implements Serializable {
         this.description = description;
     }
 
-    public Integer getYears() {
-        return years;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setYears(Integer years) {
-        this.years = years;
+    public void setCategory(Category category) {
+        this.category = category;
     }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
 }

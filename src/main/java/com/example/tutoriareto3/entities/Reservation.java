@@ -86,5 +86,4 @@ public class Reservation implements Serializable {
         this.score = score;
     }
 
-
 }
